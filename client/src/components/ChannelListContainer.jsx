@@ -69,11 +69,11 @@ export default function ChannelListContainer({
           Preview={(previewProps) => (
             <TeamChannelPreview
               {...previewProps}
-              type="team"
               isCreation={isCreating}
               setIsCreating={setIsCreating}
               setCreateType={setCreateType}
               setIsEditing={setIsEditing}
+              type="team"
             />
           )}
         />

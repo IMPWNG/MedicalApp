@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useChatContext } from "stream-chat-react";
 
 import { CloseCreateChannel } from "../assets/icon/CloseCreateChannel";
+import UserList from "./UserList";
 
 // import { userList } from './';
 // import { CloseCreateChannel } from './CloseCreateChannel';
@@ -36,6 +37,7 @@ export default function CreateChannel({ createType, setIsCreating }) {
         <CloseCreateChannel setIsCreating={setIsCreating} />
       </div>
       {createType === "team"  && <ChannelNameImput channelName={channelName} setChannelName ={setChannelName} />}
+      <UserList />
     </div>
   );
 }
