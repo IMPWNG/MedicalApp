@@ -4,7 +4,7 @@ import { Channel, useChatContext } from "stream-chat-react";
 import { ChannelInner, CreateChannel, EditChannel, TeamMessage } from './';
 
 export default function ChannelContainer({ isCreating, setIsCreating, isEditing, setIsEditing, createType }) {
-  const { Channel } = useChatContext();
+  const { channel } = useChatContext();
 
   if(isCreating) {
     return (
