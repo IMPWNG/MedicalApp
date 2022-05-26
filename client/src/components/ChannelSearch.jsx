@@ -4,13 +4,36 @@ import { useChatContext } from "stream-chat-react";
 import { SearchIcon } from "../assets/icon/SearchIcon";
 
 export default function ChannelSearch() {
+  const { client, setActiveChannel } = useChatContext();
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [teamChannels, setTeamChannels] = useState([]);
+  const [directChannels, setDirectChannels] = useState([]);
+
+  useEffect(() => {
+    if(!query) {
+      setTeamChannels([]);
+      setDirectChannels([]);
+    }
+  }, [query]);
 
   // Async because we have to wait for the channel list to be fetched
-  const getChannels = async (t) => {
+  const getChannels = async (text) => {
     try {
-      // TODO: Fetch channels from API
+      const channelResponse = client.queryChannels({
+        type: 'team',
+        name: { autocomplete: text },
+        members: { $in: [client.userID]}
+      });
+      const userResponse = client.queryUsers({
+        id: { $in: [client.userID] },
+        name : { autocomplete: text }
+      });
+      
+      const [channels, { user }] = await Promise.all([channelResponse, userResponse]);
+
+      if(channels.length) setTeamChannels(channels);
+      if(user.length) setDirectChannels(user);
     } catch (error) {
       setQuery("");
     }
@@ -24,6 +47,8 @@ export default function ChannelSearch() {
     setQuery(e.target.value);
     getChannels(e.target.value);
   };
+
+  
 
   return (
     <div className="channel-search__container">
