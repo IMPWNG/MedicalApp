@@ -29,37 +29,60 @@ const CompanyHeader = () => (
   </div>
 );
 
-export default function ChannelListContainer() {
+export default function ChannelListContainer({
+  isCreating,
+  setIsCreating,
+  setCreateType,
+  setIsEditing,
+}) {
   const logout = () => {
-      cookies.remove("token");
-      cookies.remove("userId");
-      cookies.remove("username");
-      cookies.remove("fullName");
-      cookies.remove("avatarURL");
-      cookies.remove("hashedPassword");
-      cookies.remove("phoneNumber");
+    cookies.remove("token");
+    cookies.remove("userId");
+    cookies.remove("username");
+    cookies.remove("fullName");
+    cookies.remove("avatarURL");
+    cookies.remove("hashedPassword");
+    cookies.remove("phoneNumber");
 
-      window.location.reload();
-  }
+    window.location.reload();
+  };
 
   return (
     <>
-      <SideBar  logout={logout}/>
+      <SideBar logout={logout} />
       <div className="channel-list__list__wrapper">
         <CompanyHeader />
         <ChannelSearch />
         <ChannelList
           filters={{}}
           channelRenderFilterFn={() => {}}
-          List={(listProps) => <TeamChannelList {...listProps} type="team" />}
+          List={(listProps) => (
+            <TeamChannelList
+              {...listProps}
+              type="team"
+              isCreation={isCreating}
+              setIsCreating={setIsCreating}
+              setCreateType={setCreateType}
+              setIsEditing={setIsEditing}
+            />
+          )}
           Preview={(previewProps) => (
-            <TeamChannelPreview {...previewProps} type="team" />
+            <TeamChannelPreview
+              {...previewProps}
+              isCreation={isCreating}
+              setIsCreating={setIsCreating}
+              setCreateType={setCreateType}
+              setIsEditing={setIsEditing}
+              type="team"
+            />
           )}
         />
         <ChannelList
           filters={{}}
           channelRenderFilterFn={() => {}}
-          List={(listProps) => <TeamChannelList {...listProps} type="messaging" />}
+          List={(listProps) => (
+            <TeamChannelList {...listProps} type="messaging" />
+          )}
           Preview={(previewProps) => (
             <TeamChannelPreview {...previewProps} type="messaging" />
           )}
