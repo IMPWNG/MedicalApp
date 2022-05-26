@@ -4,29 +4,55 @@ import axios from "axios";
 
 import siginImage from "../assets/images/signup.jpg";
 
-const initialState = {
-    fullName: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    phoneNumber: "",
-    avatarURL: "",
+const cookies = new Cookies();
 
-}
+const initialState = {
+  fullName: "",
+  username: "",
+  password: "",
+  confirmPassword: "",
+  phoneNumber: "",
+  avatarURL: "",
+};
 
 export default function Auth() {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(true);
 
   const handleChange = (e) => {
-      setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-      e.preventDefault();
-      
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    const { fullName, username, password, phoneNumber, avatarURL } = form;
+
+    const URL = "http://localhost:5000/auth";
+
+    const {
+      data: { token, userId, hashedPassword },
+    } = await axios.post(`${URL}/${isSignup ? "signup" : "login"}`, {
+      username,
+      password,
+      fullName,
+      phoneNumber,
+      avatarURL,
+    });
+
+    cookies.set("token", token);
+    cookies.set("username", username);
+    cookies.set("fullName", fullName);
+    cookies.set("userId", userId);
+
+    if (isSignup) {
+      cookies.set("phoneNumer", phoneNumber);
+      cookies.set("avatarURL", avatarURL);
+      cookies.set("hashedPassword", hashedPassword);
+    }
+
+    window.location.reload();
+  };
 
   const switchMode = () => {
     setIsSignup((prevIsSignup) => !prevIsSignup);
@@ -107,7 +133,7 @@ export default function Auth() {
               </div>
             )}
             <div className="auth__form-container_fields-content_button">
-                <button type="submit">{isSignup ? "Sign up" : "Sign in"}</button>
+              <button type="submit">{isSignup ? "Sign up" : "Sign in"}</button>
             </div>
           </form>
           <div className="auth__form-container_fields-account">

@@ -1,10 +1,16 @@
 import React from "react";
 
+import { AddChannel } from "../assets/icon/AddChannel";
+
 export default function TeamChannelList({
   children,
   error = false,
   loading,
   type,
+  isCreating,
+  setIsCreating,
+  setCreateType,
+  setIsEditing,
 }) {
   if (error) {
     return type === "team" ? (
@@ -32,6 +38,13 @@ export default function TeamChannelList({
         <p className="team-channel-list__header__title">
           {type === "team" ? "Channels" : "Direct Messages"}
         </p>
+        <AddChannel
+          isCreation={isCreating}
+          setIsCreating={setIsCreating}
+          setCreateType={setCreateType}
+          setIsEditing={setIsEditing}
+          type={type === "team" ? "team" : "messaging"} 
+        />
       </div>
       {children}
     </div>
